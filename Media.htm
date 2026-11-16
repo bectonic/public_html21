@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Brendan MacLean">
+  <meta name="description" content="Brendan MacLean's media demo page with audio and other media samples.">
+  <title>Media | Brendan MacLean</title>
+  <link href="BrendanPortfolio.css" rel="stylesheet" type="text/css">
+</head>
+<body id="Top">
+  <div id="wrapper">
+    <header class="masthead">
+      <p class="eyebrow">Technology · Support · Learning</p>
+      <div class="masthead-title">Brendan MacLean</div>
+      <p class="masthead-subtitle">Tech Support Portfolio</p>
+    </header>
+    <nav id="Start" aria-label="Main navigation">
+      <ul>
+          <li><a href="index.htm">Home</a></li>
+          <li><a href="Resume.htm">Resume</a></li>
+          <li><a href="Portfolio.htm">Portfolio</a></li>
+          <li class="selected"><a href="Media.htm" aria-current="page"><span class="selected">Media</span></a></li>
+          <li><a href="ProductAnalysis.htm">Product Analysis</a></li>
+          <li><a href="Contact.htm">Contact</a></li>
+          <li><a href="transcript.htm">Transcript</a></li>
+      </ul>
+    </nav>
+    <main>
+      <h1>Media Demo</h1>
+      <ol>
+        <li>
+          <h2>Audio: Welcome to My Site</h2>
+          <p>A short welcome message I recorded myself.</p>
+          <audio controls>
+            <source src="2026_11_15_14_58_59_1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </li>
+        <li>
+          <h2>Video: My Recording</h2>
+          <p>A short video I recorded myself.</p>
+          <video controls width="640">
+            <source src="14580.mp4" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        </li>
+        <li>
+          <h2>Animation: My Animated GIF</h2>
+          <p>An animated GIF I created from my own photos using Google Photos.</p>
+          <img src="20261115_153237-ANIMATION.gif" alt="Animated GIF made from a series of my own photos" width="400">
+        </li>
+        <li>
+          <h2>Slideshow: My Tech Gear</h2>
+          <p>A JavaScript slideshow that fades from one image to the next. It advances on its own, or you can use the arrows and dots.</p>
+
+          <div class="slideshow" id="gearSlideshow" aria-roledescription="carousel" aria-label="My tech gear">
+            <div class="slides">
+              <figure class="slide active">
+                <img src="mousepad.jpg" alt="My mousepad">
+                <figcaption>Mousepad</figcaption>
+              </figure>
+              <figure class="slide" aria-hidden="true">
+                <img src="laptop.jpg" alt="My laptop">
+                <figcaption>Laptop</figcaption>
+              </figure>
+              <figure class="slide" aria-hidden="true">
+                <img src="ttttf.png" alt="Photo of my tech gear">
+                <figcaption>My Gear</figcaption>
+              </figure>
+              <figure class="slide" aria-hidden="true">
+                <img src="charger.png" alt="My charger">
+                <figcaption>Charger</figcaption>
+              </figure>
+
+              <button class="slide-btn prev" type="button" aria-label="Previous slide">&#10094;</button>
+              <button class="slide-btn next" type="button" aria-label="Next slide">&#10095;</button>
+            </div>
+
+            <div class="slide-dots">
+              <button class="dot active" type="button" aria-label="Show slide 1"></button>
+              <button class="dot" type="button" aria-label="Show slide 2"></button>
+              <button class="dot" type="button" aria-label="Show slide 3"></button>
+              <button class="dot" type="button" aria-label="Show slide 4"></button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <h2>YouTube: Helping Someone Pick a New Phone</h2>
+          <p>A Linus Tech Tips video where Linus helps his wife choose a new phone. It's a good example of finding out what a user actually needs before recommending tech.</p>
+          <iframe class="video-embed" width="560" height="315"
+            src="https://www.youtube.com/embed/yFJDP7OinRM"
+            title="YouTube video: My Wife Needs a Phone, and I'm NOT Gonna Mess It Up This Time (Linus Tech Tips)"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+        </li>
+      </ol>
+    </main>
+  </div>
+
+  <script>
+    // Crossfade slideshow for List Item 4
+    (function () {
+      const slideshow = document.getElementById("gearSlideshow");
+      const slides = slideshow.querySelectorAll(".slide");
+      const dots = slideshow.querySelectorAll(".dot");
+      const delay = 4000; // milliseconds between slides
+      let current = 0;
+      let timer = null;
+
+      function showSlide(n) {
+        // Wrap around so "next" on the last slide goes back to the first
+        current = (n + slides.length) % slides.length;
+        slides.forEach(function (slide, i) {
+          const isActive = i === current;
+          slide.classList.toggle("active", isActive);
+          slide.setAttribute("aria-hidden", !isActive);
+          dots[i].classList.toggle("active", isActive);
+          dots[i].setAttribute("aria-current", isActive);
+        });
+      }
+
+      function start() {
+        stop();
+        timer = setInterval(function () { showSlide(current + 1); }, delay);
+      }
+
+      function stop() {
+        clearInterval(timer);
+      }
+
+      // Arrow buttons
+      slideshow.querySelector(".prev").addEventListener("click", function () { showSlide(current - 1); });
+      slideshow.querySelector(".next").addEventListener("click", function () { showSlide(current + 1); });
+
+      // Dots jump straight to a slide
+      dots.forEach(function (dot, i) {
+        dot.addEventListener("click", function () { showSlide(i); });
+      });
+
+      // Pause while the mouse is over it or a keyboard user is inside it
+      slideshow.addEventListener("mouseenter", stop);
+      slideshow.addEventListener("mouseleave", start);
+      slideshow.addEventListener("focusin", stop);
+      slideshow.addEventListener("focusout", start);
+
+      // Don't auto-play for visitors who have turned on "reduce motion"
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        start();
+      }
+    })();
+  </script>
+</body>
+</html>
